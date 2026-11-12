@@ -27,9 +27,12 @@ class Grro < Formula
   end
 
   def install
-    bin.install Dir["grro-*"].first => "grro"
-    generate_completions_from_executable(bin/"grro", "completion")
-  end
+     # A downloaded program is not marked as runnable, so mark it first.
+     binary = Dir["grro-*"].first
+     chmod 0755, binary
+     bin.install binary => "grro"
+     generate_completions_from_executable(bin/"grro", "completion")
+   end
 
   test do
     assert_match version.to_s, shell_output("#{bin}/grro version")
